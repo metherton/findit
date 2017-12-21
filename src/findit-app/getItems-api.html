@@ -1,0 +1,107 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+
+<dom-module id="get-items-api">
+    <template>
+        <style include="app-grid-style">
+            :host {
+                display: block;
+                --app-grid-columns: 3;
+                --app-grid-item-height: 100px;
+            }
+
+            ul {
+                padding: 0;
+                list-style: none;
+            }
+        </style>
+        <iron-ajax auto id="getItems"
+                   url="http://www.martinetherton.com:5001/items"
+                   handle-as="json"
+                   last-response="{{ajaxResponse}}" debounce-duration="300">
+
+        </iron-ajax>
+        <ul class="app-grid">
+            <template is="dom-repeat" items="[[ajaxResponse]]">
+                <!--<li class="item"><div class="horizontal"><paper-card heading="[[item.firstName]] [[item.surname]]"><div class="card-content">Born in [[item.placeOfBirth]] on [[item.dateOfBirth]]</div></paper-card></div></li>-->
+                <li>[[item.description]]</li>
+            </template>
+        </ul>
+    </template>
+
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        /* global Polymer */
+        class GetItemsApi extends Polymer.Element {
+            static get is() {
+                return 'get-items-api';
+            }
+
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: "bar"
+                    },
+                    editModel: {
+                        type: Object,
+                        notify: true
+                    },
+                    panelToggle: {
+                        type: String,
+                        value: "",
+                        notify: true
+                    }
+
+                }
+            }
+
+            json(obj) {
+                return JSON.stringify(obj, null, 2);
+            }
+
+            openPanel(e) {
+                var self = this;
+                this.$.addPerson.opened = true;
+                self.panelToggle = "toggled";
+                self.editModel = {firstName: "", surname: "", dateOfBirth:"", placeOfBirth:""}
+            }
+
+            closePanel() {
+                this.panelToggle = "";
+            }
+
+            savePerson() {
+                var self = this;
+                self.$.savePerson.body = JSON.stringify(self.editModel);
+                self.$.savePerson.contentType = "application/json";
+                self.$.savePerson.generateRequest();
+            }
+
+            savePersonCallback() {
+                var self = this;
+                self.$.toast.text = "Birth saved";
+                self.$.toast.show();
+                self.closePanel();
+                self.$.getPersons.generateRequest();
+            }
+
+            productClass(index) {
+                let color = index % 2 == 0 ? 'white' : 'lightgray';
+                return 'item ' + color;
+            }
+
+
+
+
+
+        }
+
+        window.customElements.define(GetItemsApi.is, GetItemsApi);
+    </script>
+</dom-module>

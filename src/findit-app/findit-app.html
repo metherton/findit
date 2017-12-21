@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="./getItems-api.html">
+
+<dom-module id="findit-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <get-items-api></get-items-api>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    /* global Polymer */
+    class FinditApp extends Polymer.Element {
+      static get is() { return 'findit-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'findit-app'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(FinditApp.is, FinditApp);
+  </script>
+</dom-module>

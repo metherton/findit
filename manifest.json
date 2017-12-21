@@ -1,0 +1,6 @@
+{
+  "name": "findit",
+  "short_name": "findit",
+  "start_url": "/",
+  "display": "standalone"
+}
